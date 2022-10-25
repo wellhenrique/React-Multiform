@@ -1,43 +1,61 @@
-import { FormProvider, useForm } from "react-hook-form";
-import { Steps } from "./Stepper";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import { FormProvider, useForm } from 'react-hook-form'
+import { Steps } from './Stepper'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import { PersonalInfo } from './StepComponents/PersonalInfo'
+
+const schema = z
+  .object({
+    name: z.string().min(1),
+    age: z.string().min(1),
+
+    street: z.string().min(1),
+    streetNumber: z.string().min(1),
+    city: z.string().min(1),
+
+    mobileNumber: z.string().min(1),
+    telNumber: z.string().min(1),
+  })
+  .required()
+
+type FormValues = z.infer<typeof schema>
 
 const sourceSteps = [
   {
-    label: "Dados Pessoais",
-    Component: <p>Passo 1</p>,
+    label: 'Dados Pessoais',
+    Component: <PersonalInfo />,
     hasError: false,
   },
   {
-    label: "Dados de Endereço",
+    label: 'Dados de Endereço',
     Component: <p>Passo 2</p>,
     hasError: false,
   },
   {
-    label: "Dados de Contato",
+    label: 'Dados de Contato',
     Component: <p>Passo 3</p>,
-    hasError: false,
+    hasError: true,
   },
-];
+]
 
 export function Form() {
   const methods = useForm({
-    criteriaMode: "all",
-    mode: "all",
+    resolver: zodResolver(schema),
+    criteriaMode: 'all',
+    mode: 'all',
     defaultValues: {
-      name: "",
-      age: "",
-      street: "",
-      city: "",
-      streetNumber: "",
-      mobileNumber: "",
-      telNumber: "",
+      name: '',
+      age: '',
+      street: '',
+      city: '',
+      streetNumber: '',
+      mobileNumber: '',
+      telNumber: '',
     },
-  });
+  })
 
   if (methods.formState.isSubmitSuccessful) {
     return (
@@ -47,7 +65,7 @@ export function Form() {
           Clique aqui para enviar um novo cadastro
         </Button>
       </Box>
-    );
+    )
   }
 
   return (
@@ -56,5 +74,5 @@ export function Form() {
         <Steps items={sourceSteps} />
       </form>
     </FormProvider>
-  );
+  )
 }
